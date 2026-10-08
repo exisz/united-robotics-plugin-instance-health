@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "methods": {
+    "health.check": {
+      "description": "Probe every United Robotics World instance's /healthz endpoints and report each endpoint as up, gated, down or unreachable, plus latency and World revision.",
+      "params": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    }
+  }
+}
