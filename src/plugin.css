@@ -8,7 +8,9 @@
 .ur-health-shell .ur-health-down{box-shadow:inset 0 0 0 1px var(--red-8),inset 4px 0 0 var(--red-9)}
 .ur-health-shell .ur-health-degraded{box-shadow:inset 0 0 0 1px var(--amber-8),inset 4px 0 0 var(--amber-9)}
 .ur-health-shell .ur-health-healthy{box-shadow:inset 0 0 0 1px var(--border,var(--gray-6)),inset 4px 0 0 var(--jade-9)}
-.ur-health-endpoints{display:grid;gap:12px;margin-top:16px}
+.ur-health-service{margin-top:16px}
+.ur-health-service-name{letter-spacing:.04em;text-transform:uppercase}
+.ur-health-endpoints{display:grid;gap:12px;margin-top:8px}
 .ur-health-endpoint{min-width:0;padding-top:12px;border-top:1px solid var(--border,var(--gray-5))}
 .ur-health-endpoint-main{min-width:0}
 .ur-health-url{font-family:ui-monospace,monospace;overflow-wrap:anywhere}
