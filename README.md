@@ -1,6 +1,6 @@
 # Instance Health — United Robotics local plugin
 
-Health monitor for every United Robotics World instance, shown as one Capital window. Same `mount` / `invoke` / one-shot `rpc.mjs` architecture as Todo List and Network Access. React, Radix Themes, CSS and the standalone Node backend are bundled into committed artifacts. No Worker, hosted backend, extra daemon or World change; the only credential is an optional, path-scoped Cloudflare Access service token.
+Health monitor for every United Robotics World instance, shown as one Capital window. Same `mount` / `invoke` / one-shot `rpc.mjs` architecture as Todo List and Network Access. React, Radix Themes, CSS and the standalone Node backend are bundled into committed artifacts. No Worker, hosted backend, extra daemon or World change; the only credential is an optional Cloudflare Access service token.
 
 ## What it checks
 
@@ -16,7 +16,7 @@ Each endpoint is `up` (HTTP 200 with World's `{"ok":true}` or the Gateway's `{"o
 
 ### Passing Cloudflare Access
 
-The public `*.unitedrobotics.app` hostnames sit behind Cloudflare Access. When the plugin receives `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET` (an Access Service Token), it sends them as `CF-Access-Client-Id` / `CF-Access-Client-Secret` to those public hostnames only, never to tailnet or other hosts. On the Cloudflare side the token is accepted only by separate Access applications covering exactly `<hostname>/healthz` with a Service Auth (`non_identity`) policy, so it cannot open `/` or `/api`. Without the token the public endpoints show as gated with "未配置 Cloudflare Access 服务令牌"; a rejected token shows "Cloudflare Access 拒绝了服务令牌".
+The public `*.unitedrobotics.app` hostnames sit behind Cloudflare Access. When the plugin receives `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET` (an Access Service Token), it sends them as `CF-Access-Client-Id` / `CF-Access-Client-Secret` to those public hostnames only, never to tailnet or other hosts. On the Cloudflare side the token is a general machine token: each existing Access application ("Capital + OpenClaw", "Yes Education + OpenClaw") has an extra Service Auth (`non_identity`) policy for it, so it passes Access on the whole host. Behind Access, World still requires Logto and OpenClaw still requires its Gateway token. Keep it server-side only (plugin secrets, roblocks); never send it to a browser. Without the token the public endpoints show as gated with "未配置 Cloudflare Access 服务令牌"; a rejected token shows "Cloudflare Access 拒绝了服务令牌".
 
 The secrets reach the backend through the frontline `connectors.json`:
 
