@@ -7,9 +7,10 @@ export const windows=[{id:'health',title:'实例健康监控'}];
 const refreshMs=60000;
 const statusView={healthy:{color:'jade',text:'健康'},degraded:{color:'amber',text:'部分异常'},unknown:{color:'gray',text:'无法确认'},down:{color:'red',text:'不健康'}};
 const endpointView={up:{color:'jade',text:'正常'},gated:{color:'gray',text:'被拦截'},down:{color:'red',text:'异常'},unreachable:{color:'red',text:'无法连接'}};
+const serviceName={world:'World',openclaw:'OpenClaw'};
 const time=iso=>new Date(iso).toLocaleTimeString('zh-CN',{hour12:false});
 function accept(value){
-  if(!value||typeof value.checkedAt!=='string'||!Array.isArray(value.instances)||value.instances.some(i=>!statusView[i?.status]||!Array.isArray(i.endpoints)||i.endpoints.some(e=>!endpointView[e?.state])))throw Error('服务器返回格式无效');
+  if(!value||typeof value.checkedAt!=='string'||!Array.isArray(value.instances)||value.instances.some(i=>!statusView[i?.status]||!Array.isArray(i.endpoints)||i.endpoints.some(e=>!endpointView[e?.state]||!serviceName[e?.service])))throw Error('服务器返回格式无效');
   return value;
 }
 function Endpoint({endpoint}){
@@ -39,7 +40,10 @@ export function HealthPanel({invoke,appearance='light'}){
     {!data?<Card><Flex align="center" gap="3">{busy&&<Spinner/>}<Text>{busy?'正在检查所有实例…':'未能取得检查结果，不会把空白视为健康。'}</Text></Flex></Card>:
     <Box className="ur-health-grid">{data.instances.map(instance=>{const view=statusView[instance.status];return <Card key={instance.id} className={`ur-health-card ur-health-${instance.status}`}>
       <Flex justify="between" align="center" gap="2"><Heading size="3">{instance.name}</Heading><Badge size="2" color={view.color}>{view.text}</Badge></Flex>
-      <Box className="ur-health-endpoints">{instance.endpoints.map(endpoint=><Endpoint key={endpoint.id} endpoint={endpoint}/>)}</Box>
+      {Object.keys(serviceName).filter(service=>instance.endpoints.some(e=>e.service===service)).map(service=>{const status=instance.services?.[service];return <Box key={service} className="ur-health-service">
+        <Flex align="center" gap="2"><Text size="1" weight="bold" color="gray" className="ur-health-service-name">{serviceName[service]}</Text>{statusView[status]&&<Badge size="1" variant="outline" color={statusView[status].color}>{statusView[status].text}</Badge>}</Flex>
+        <Box className="ur-health-endpoints">{instance.endpoints.filter(e=>e.service===service).map(endpoint=><Endpoint key={endpoint.id} endpoint={endpoint}/>)}</Box>
+      </Box>;})}
     </Card>;})}</Box>}
   </Box></Theme>;
 }

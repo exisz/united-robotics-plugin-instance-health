@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "methods": {
     "health.check": {
-      "description": "Probe every United Robotics World instance's /healthz endpoints and report each endpoint as up, gated, down or unreachable, plus latency and World revision.",
+      "description": "Probe every United Robotics instance's World and OpenClaw Gateway /healthz endpoints (public through Cloudflare Access and tailnet) and report each endpoint as up, gated, down or unreachable, with per-service and per-instance roll-ups, latency and World revision.",
       "params": {
         "type": "object",
         "additionalProperties": false
